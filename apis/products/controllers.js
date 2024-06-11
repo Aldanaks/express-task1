@@ -1,19 +1,18 @@
-const Products = require("../../data");
 const Product = require("../../models/product");
 
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Products.find();
-    return res.jdon(products);
+    const products = await Product.find();
+    return res.json(products);
   } catch (error) {
-    return res.json(error);
+    return next(error);
   }
 };
 
 const getOneProduct = async (req, res) => {
   const id = req.params.id;
   try {
-    const product = await product.findById(id);
+    const product = await Product.findById(id);
     if (product) {
       return res.status(200).json(product);
     } else {
@@ -22,20 +21,23 @@ const getOneProduct = async (req, res) => {
         .json({ msg: "product with this id is not found!" });
     }
   } catch (error) {
-    return res.status(error.status || 500).json(error);
+    return next(error);
   }
 };
 
 const createOneProduct = async (req, res) => {
   try {
-    const product = await product.create(req.body);
+    if (req.file) {
+      req.body.civilId = req.file.path;
+    }
+    const product = await Product.create(req.body);
     if (product) {
       return res.status(201).json(product);
     } else {
       return res.status(404).json({ msg: "create product failed!" });
     }
   } catch (error) {
-    return res.status(error.status).json(error);
+    return next(error);
   }
 };
 
@@ -49,7 +51,7 @@ const updateOneProduct = async (req, res) => {
       return res.status(404).json({ msg: "update product failed!" });
     }
   } catch (error) {
-    return res.status(error.status).json(error);
+    return next(error);
   }
 };
 
@@ -63,7 +65,7 @@ const deleteOneProduct = async (req, res) => {
       return res.status(404).json({ msg: "update product failed!" });
     }
   } catch (error) {
-    return res.status(error.status).json(error);
+    return next(error);
   }
 };
 
