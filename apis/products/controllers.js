@@ -1,6 +1,6 @@
 const Product = require("../../models/product");
 
-const getAllProducts = async (req, res) => {
+const getAllProducts = async (req, res, next) => {
   try {
     const products = await Product.find();
     return res.json(products);
@@ -9,7 +9,7 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-const getOneProduct = async (req, res) => {
+const getOneProduct = async (req, res, next) => {
   const id = req.params.id;
   try {
     const product = await Product.findById(id);
@@ -25,10 +25,10 @@ const getOneProduct = async (req, res) => {
   }
 };
 
-const createOneProduct = async (req, res) => {
+const createOneProduct = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.civilId = req.file.path;
+      req.body.image = req.file.path;
     }
     const product = await Product.create(req.body);
     if (product) {
@@ -41,7 +41,7 @@ const createOneProduct = async (req, res) => {
   }
 };
 
-const updateOneProduct = async (req, res) => {
+const updateOneProduct = async (req, res, next) => {
   const id = req.params.id;
   try {
     const product = await product.findByIdAndUpdate(id, req.body);
@@ -55,7 +55,7 @@ const updateOneProduct = async (req, res) => {
   }
 };
 
-const deleteOneProduct = async (req, res) => {
+const deleteOneProduct = async (req, res, next) => {
   const id = req.params.id;
   try {
     const product = await product.findByIdAndDelete(id, req.body);
